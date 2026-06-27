@@ -67,10 +67,19 @@ const registerUser = catchAsync(async (req: Request, res: Response, next: NextFu
     const payload =req.body;
     const user = await userService.registerUserIntoDB(payload);
 
-    res.status(httpStatus.CREATED).json({
+    // res.status(httpStatus.CREATED).json({
+    //     success: true,
+    //     statusCode: httpStatus.CREATED,
+    //     message:'user registered successfully',
+    //     data: {
+    //         user
+    //     }
+    // })
+
+    sendResponse(res,{
         success: true,
         statusCode: httpStatus.CREATED,
-        message:'user registered successfully',
+        message: 'User registered successfully',
         data: {
             user
         }
