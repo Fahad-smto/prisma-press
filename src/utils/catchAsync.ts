@@ -1,5 +1,7 @@
+import { NextFunction, RequestHandler,Request,Response} from "express";
+import httpStatus from "http-status";
 
-const catchAsync = (fn: RequestHandler) => {
+export const catchAsync = (fn: RequestHandler) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
             await fn(req, res, next);
