@@ -1,7 +1,33 @@
-import { UserCreateArgs } from './../../../generated/prisma/models/User';
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import httpStatus from "http-status";
 import { userService } from "./user.service";
+import { catchAsync } from '../../utils/catchAsync';
+
+
+type TMeta = {
+    page: number;
+    limit: number;
+    total: number;
+}
+
+type TResponseData<T> = {
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data?: T;
+    meta?: TMeta;
+    
+}
+
+const sendResponse = <T>(res:Response,data:TResponseData<T>) => {
+    res.status(data.statusCode).json({
+        success: data.success,
+        statusCode: data.statusCode,
+       
+    });
+
+}
+
 
 
 
