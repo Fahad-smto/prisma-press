@@ -8,14 +8,16 @@ const loginUser = catchAsync(async (req: Request, res: Response, next: NextFunct
 
     const payload = req.body;
 
-    const loginResult = await authService.loginUser(payload);
+    const { accessToken, refreshToken} = await authService.loginUser(payload);
 
     sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
         message: 'User logged in successfully',
-        data: loginResult
-    });
+        data: {
+            accessToken,
+            refreshToken
+        }   });
 });
 
 export const authController = {

@@ -9,6 +9,8 @@ const loginUser =async (payload: ILogInUser)=>{
 
     const { email, password } = payload;
 
+    
+
     const user =await prisma.user.findUniqueOrThrow({
         where: { email }
     })
