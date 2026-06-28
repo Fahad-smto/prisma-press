@@ -8,8 +8,20 @@ import { sendResponse } from "../../utils/sendResponse";
 
 
 
+const getUserProfile: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
 
+    const user = await userService.getUserProfile(userId as string);
 
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: 'User profile retrieved successfully',
+        data: {
+            user
+        }
+    });
+});
 
 // const registerUser = async (req: Request, res: Response) => {
 //     try {
@@ -64,5 +76,6 @@ const registerUser = catchAsync(async (req: Request, res: Response, next: NextFu
 
 
 export const userController = {
-    registerUser
+    registerUser,
+    getUserProfile
 }
