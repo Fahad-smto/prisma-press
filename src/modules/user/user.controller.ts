@@ -3,6 +3,8 @@ import httpStatus from "http-status";
 import { userService } from "./user.service";
 import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from "../../utils/sendResponse";
+import config from "../../config";
+import jwt from "jsonwebtoken";
 
 
 
@@ -13,6 +15,10 @@ const getUserProfile: RequestHandler = catchAsync(async (req: Request, res: Resp
 
     const {accessToken} = req.cookies 
     console.log('accessToken', accessToken);
+
+    const verifiedToken =jwt.verify(accessToken, config.jwt_access_secret as string) as {id: string, iat: number, exp: number};
+
+    console.log('verifiedToken', verifiedToken);
   
 
     const user = await userService.getUserProfileFromDB(userId as string);
