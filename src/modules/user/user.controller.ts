@@ -11,7 +11,11 @@ import { sendResponse } from "../../utils/sendResponse";
 const getUserProfile: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id;
 
-    const user = await userService.getUserProfile(userId as string);
+    const {accessToken} = req.cookies 
+    console.log('accessToken', accessToken);
+  
+
+    const user = await userService.getUserProfileFromDB(userId as string);
 
     sendResponse(res, {
         success: true,
