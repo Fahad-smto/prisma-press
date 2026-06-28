@@ -18,10 +18,16 @@ const loginUser =async (payload: ILogInUser)=>{
         throw new Error("Invalid credentials");
     }
 
-    const accessToken = jwt.sign({ id: user.id, email: user.email ,role: user.role}, config.jwt_access_secret as string, { expiresIn: config.jwt_access_expires_in as SignOptions['expiresIn'] });
+    const jwtPayload = {
+        id: user.id,
+        email: user.email,
+        role: user.role
+    };
+
+    const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, { expiresIn: config.jwt_access_expires_in as SignOptions['expiresIn'] });
 
 
-    const refreshToken = jwt.sign({ id: user.id, email: user.email ,role: user.role}, config.jwt_refresh_secret as string, { expiresIn: config.jwt_refresh_expires_in as SignOptions['expiresIn'] });
+    const refreshToken = jwt.sign(jwtPayload, config.jwt_refresh_secret as string, { expiresIn: config.jwt_refresh_expires_in as SignOptions['expiresIn'] });
  
     return {
         accessToken,
