@@ -4,6 +4,7 @@ import config from "../../config";
 import { Role } from "../../../generated/prisma/client";
 import jwt from "jsonwebtoken";
 import httpStatus from "http-status";
+import { catchAsync } from "../../utils/catchAsync";
 
 const router = Router();
 
@@ -21,6 +22,22 @@ declare global {
 }
 
 router.post("/register", userController.registerUser);
+
+
+const auth = ()=>{
+    return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+        const token = req.cookies.accessToken||req.headers.authorization?.startsWith('Bearer')?req.headers.authorization?.split(' ')[1]:req.headers.authorization;
+
+        if (!token) {
+            return res.status(httpStatus.UNAUTHORIZED).json({ error: "No access token provided" });
+        }
+
+        const verifiedToken = jwt.verify(token, config.jwt_access_secret as string) as jwt.JwtPayload;
+
+    })
+}
+
 
 router.get(
     "/me",
