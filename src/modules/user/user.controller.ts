@@ -11,17 +11,17 @@ import jwt from "jsonwebtoken";
 
 
 const getUserProfile: RequestHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user?.id;
+   
 
-    const {accessToken} = req.cookies 
-    console.log('accessToken', accessToken);
+    // const {accessToken} = req.cookies 
+    // console.log('accessToken', accessToken);
 
-    const verifiedToken =jwt.verify(accessToken, config.jwt_access_secret as string) as {id: string, iat: number, exp: number};
+    // const verifiedToken =jwt.verify(accessToken, config.jwt_access_secret as string) as jwt.JwtPayload;
 
-    console.log('verifiedToken', verifiedToken);
-  
+    // console.log('verifiedToken', verifiedToken);
+    // const userId = verifiedToken.id;
 
-    const user = await userService.getUserProfileFromDB(userId as string);
+    const user = await userService.getUserProfileFromDB(req.user?.id as string);
 
     sendResponse(res, {
         success: true,
