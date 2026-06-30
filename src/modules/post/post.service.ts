@@ -1,3 +1,4 @@
+import { Result } from './../../../generated/prisma/internal/prismaNamespace';
 import { prisma } from "../../lib/prisma"
 import { ICreatePostPayload } from "./post.interface"
 
@@ -21,13 +22,13 @@ const getAllPosts = async () => {
         {
             include: {
                 author: {
-                    omit:{
-                        password:true
+                    omit: {
+                        password: true
                     }
                 },
                 comments: true
-                        
-             }
+
+            }
         })
 
     return getAllPost
@@ -37,32 +38,32 @@ const getAllPosts = async () => {
 const getPostById = async (postId: string) => {
 
     const post = await prisma.post.findFirstOrThrow({
-        where:{
-            id:postId
+        where: {
+            id: postId
         }
     })
 
-const updatedPost =await prisma.post.update({
-    where :{
-        id:postId ,
-    },
-    data:{
-        views:{
-            increment:1
+    const updatedPost = await prisma.post.update({
+        where: {
+            id: postId,
         },
-    },
-     include:{
-            author:{
-                omit:{
-                    password:true
+        data: {
+            views: {
+                increment: 1
+            },
+        },
+        include: {
+            author: {
+                omit: {
+                    password: true
                 }
             },
-            comments:true
+            comments: true
         }
 
-})
+    })
 
-return updatedPost
+    return updatedPost
 
 }
 
@@ -81,7 +82,31 @@ const getPostsStats = async () => {
 
 const getMyPosts = async (authorId: string) => {
 
+    const result = await prisma.post.findMany({
+        where: {
+            authorId
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            comments: true,
+            author: {
+                omit: {
+                    password: true
+                }
 
+            },
+
+            _count: {
+                select: {
+                    comments: true
+                }
+            }
+        }
+    })
+
+    return result
 }
 
 export const postService = {
