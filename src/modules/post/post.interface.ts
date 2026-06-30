@@ -10,14 +10,14 @@ export interface ICreatePostPayload {
     tags : string[]
 }
 
-// export interface IUpdatePostPayload{
-//     title?: string;
-//     content?: string;
-//     thumbnail?: string;
-//     isFeatured?: boolean;
-//     status?: PostStatus
-//     tags?: string[]
-// }
+export interface IUpdatePostPayload{
+    title?: string;
+    content?: string;
+    thumbnail?: string;
+    isFeatured?: boolean;
+    status?: postStatus
+    tags?: string[]
+}
 
 // export interface IPostQuery extends PostWhereInput {
 //     //post model er fields
