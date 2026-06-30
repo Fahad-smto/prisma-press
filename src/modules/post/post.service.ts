@@ -75,7 +75,7 @@ const updatePost = async (postId: string, payload: IUpdatePostPayload, authorId:
         }
     })
 
-    if (!isAdmin  && post.authorId !== authorId) {
+    if (!isAdmin && post.authorId !== authorId) {
         throw new Error('you are not the owner of this post')
     }
 
@@ -94,53 +94,69 @@ const updatePost = async (postId: string, payload: IUpdatePostPayload, authorId:
         }
     })
 
-return result
-}
-
-const deletePost = async (postId: string, authorId: string, isAdmin: boolean) => {
-
-
-}
-
-const getPostsStats = async () => {
-
-}
-
-const getMyPosts = async (authorId: string) => {
-
-    const result = await prisma.post.findMany({
-        where: {
-            authorId
-        },
-        orderBy: {
-            createdAt: "desc"
-        },
-        include: {
-            comments: true,
-            author: {
-                omit: {
-                    password: true
-                }
-
-            },
-
-            _count: {
-                select: {
-                    comments: true
-                }
-            }
-        }
-    })
-
     return result
 }
 
-export const postService = {
-    createPost,
-    getAllPosts,
-    getPostById,
-    updatePost,
-    deletePost,
-    getPostsStats,
-    getMyPosts
+const deletePost = async (postId: string, authorId: string, isAdmin: boolean) => {
+    const post = await prisma.post.findFirstOrThrow({
+        where: {
+            id: postId
+        }
+    })
+
+    if (!isAdmin && post.authorId !== authorId) {
+        throw new Error('you are not the owner of this post')
+    }
+    
+     const result = await prisma.post.delete({
+         where: {
+            id: postId
+        }
+     })
+
+     return result
+       
 }
+    
+const getPostsStats = async () => {
+
+    }
+
+    const getMyPosts = async (authorId: string) => {
+
+        const result = await prisma.post.findMany({
+            where: {
+                authorId
+            },
+            orderBy: {
+                createdAt: "desc"
+            },
+            include: {
+                comments: true,
+                author: {
+                    omit: {
+                        password: true
+                    }
+
+                },
+
+                _count: {
+                    select: {
+                        comments: true
+                    }
+                }
+            }
+        })
+
+        return result
+    }
+
+    export const postService = {
+        createPost,
+        getAllPosts,
+        getPostById,
+        updatePost,
+        deletePost,
+        getPostsStats,
+        getMyPosts
+    }
