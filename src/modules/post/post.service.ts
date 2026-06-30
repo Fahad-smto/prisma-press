@@ -20,9 +20,14 @@ const getAllPosts = async () => {
     const getAllPost = await prisma.post.findMany(
         {
             include: {
-                author: true,
+                author: {
+                    omit:{
+                        password:true
+                    }
+                },
                 comments: true
-            }
+                        
+             }
         })
 
     return getAllPost
@@ -31,7 +36,33 @@ const getAllPosts = async () => {
 
 const getPostById = async (postId: string) => {
 
+    const post = await prisma.post.findFirstOrThrow({
+        where:{
+            id:postId
+        }
+    })
 
+const updatedPost =await prisma.post.update({
+    where :{
+        id:postId ,
+    },
+    data:{
+        views:{
+            increment:1
+        },
+    },
+     include:{
+            author:{
+                omit:{
+                    password:true
+                }
+            },
+            comments:true
+        }
+
+})
+
+return updatedPost
 
 }
 
