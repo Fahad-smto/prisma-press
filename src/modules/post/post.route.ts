@@ -5,7 +5,10 @@ import { postController } from "./post.controller";
 
 const router = Router();
 
-
+router.post(
+    "/", 
+    auth(Role.USER, Role.ADMIN, Role.AUTHOR), postController.createPost
+);
 
 router.get("/", postController.getAllPosts);
 
