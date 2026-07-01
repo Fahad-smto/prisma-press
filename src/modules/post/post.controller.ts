@@ -115,7 +115,7 @@ const getMyPosts = catchAsync(async (req : Request, res : Response, next : NextF
 })
 
 export const postController = {
-   
+    createPost,
     getAllPosts,
     getPostById,
     updatePost,
